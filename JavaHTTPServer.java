@@ -19,13 +19,13 @@ import java.awt.Desktop;
 public class JavaHTTPServer implements Runnable { 
  
 	static final File WEB_ROOT = new File(".");
-	static final String DEFAULT_FILE = "Index\\testPage.html";
+	static final String DEFAULT_FILE = "myDir.html";
 	static final String FILE_NOT_FOUND = "404.html";
 	static final String METHOD_NOT_SUPPORTED = "not_supported.html";
 	// port to listen connection
 	static final int PORT = 8080;
  
-	// verbose mode
+	// verbose mod
 	static final boolean verbose = true;
  
 	// Client Connection via Socket Class
@@ -36,6 +36,11 @@ public class JavaHTTPServer implements Runnable {
 	}
  
 	public static void main(String[] args) {
+
+		GenerateHTML html = new GenerateHTML();
+
+		html.createFile();
+		html.generateHTML();
 		try
 		{
 			ServerSocket serverConnect = new ServerSocket(PORT);
@@ -199,21 +204,23 @@ public class JavaHTTPServer implements Runnable {
 		else
 			return "text/plain";
 	}
- 
 
 	private void fileNotFound(PrintWriter out, OutputStream dataOut, String fileRequested) throws IOException {
 		File file = new File(WEB_ROOT, FILE_NOT_FOUND);
 		int fileLength = (int) file.length();
 		String content = "text/html";
 		byte[] fileData = readFileData(file, fileLength);
+
+
  
 		out.println("HTTP/1.1 404 File Not Found");
 		out.println("Server: Java HTTP Server from SSaurel : 1.0");
-		out.println("Date: " + new Date());out.println("Content-type: " + content);
+		out.println("Date: " + new Date());
+		out.println("Content-type: " + content);
 		out.println("Content-length: " + fileLength);
 		out.println(); // blank line between headers and content, very important !
 		out.flush(); // flush character output stream buffer
- 
+
 
 		dataOut.write(fileData, 0, fileLength);
 		dataOut.flush();
